@@ -1,4 +1,4 @@
-name = "puzzle-a-day"
+name = "weekday-puzzle"
 main = "worker.js"
 compatibility_date = "2025-12-13"
 
