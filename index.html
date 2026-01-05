@@ -186,6 +186,119 @@
         }
         
         #result { margin-top: 30px; text-align: center; }
+        
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+            body { padding: 0; }
+            
+            .navbar {
+                padding: 8px 15px;
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .navbar-center {
+                position: static;
+                transform: none;
+                font-size: 1.5em;
+            }
+            
+            .logo img {
+                width: 60px !important;
+                height: 60px !important;
+            }
+            
+            .main-content {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 15px;
+                border-radius: 10px;
+            }
+            
+            h1 {
+                font-size: 1.5em;
+                margin-bottom: 20px;
+            }
+            
+            h3 {
+                font-size: 1.1em;
+            }
+            
+            .controls {
+                padding: 15px;
+                gap: 10px;
+            }
+            
+            .control-group {
+                flex: 1 1 100%;
+            }
+            
+            select, button {
+                width: 100%;
+                padding: 12px;
+                font-size: 1em;
+            }
+            
+            .pieces-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+            
+            .piece-card {
+                padding: 10px;
+            }
+            
+            .piece-number {
+                font-size: 1em;
+            }
+            
+            .piece-name {
+                font-size: 0.9em;
+            }
+            
+            .pc, .pe {
+                width: 14px;
+                height: 14px;
+            }
+            
+            .board {
+                max-width: 100%;
+                padding: 3px;
+                gap: 2px;
+            }
+            
+            .cell {
+                font-size: 1em;
+                min-height: 40px;
+            }
+            
+            footer {
+                padding: 15px 10px;
+                font-size: 0.85em;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .navbar-center {
+                font-size: 1.2em;
+            }
+            
+            h1 {
+                font-size: 1.2em;
+            }
+            
+            .cell {
+                font-size: 0.8em;
+                min-height: 35px;
+            }
+            
+            .pc, .pe {
+                width: 12px;
+                height: 12px;
+            }
+        }
     </style>
 </head>
 <body>
