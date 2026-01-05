@@ -247,15 +247,19 @@
                 min-width: 100px;
             }
             
-            .control-group:nth-child(4),
+            .control-group:nth-child(4) {
+                flex: 1 1 100%;
+                display: flex;
+                justify-content: center;
+            }
+            
             .control-group:nth-child(5) {
                 flex: 1 1 calc(50% - 8px);
             }
             
-            .control-group:nth-child(4):last-of-type {
-                flex: 1 1 100%;
-                display: flex;
-                justify-content: center;
+            .controls.two-buttons .control-group:nth-child(4),
+            .controls.two-buttons .control-group:nth-child(5) {
+                flex: 1 1 calc(50% - 8px);
             }
             
             select, button {
@@ -871,6 +875,7 @@
             
             document.getElementById('next-btn').style.display = 'none';
             document.getElementById('solve-btn').textContent = 'Solve Puzzle';
+            document.querySelector('.controls').classList.remove('two-buttons');
             
             // Re-apply highlighting after board reset
             updateYearDisplay();
@@ -900,6 +905,7 @@
                 if(!solution) {
                     boardTitle.innerHTML = 'Solution for ' + MONTHS[month-1] + ' ' + day + ', ' + currentYear + ' (' + WEEKDAYS[weekday] + ') - No solution found';
                     document.getElementById('next-btn').style.display = 'none';
+                    document.querySelector('.controls').classList.remove('two-buttons');
                     return;
                 }
                 
@@ -918,6 +924,7 @@
                 // Show next button
                 document.getElementById('next-btn').style.display = 'block';
                 document.getElementById('solve-btn').textContent = 'Reset';
+                document.querySelector('.controls').classList.add('two-buttons');
                 
             } catch(err) {
                 console.error(err);
