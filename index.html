@@ -715,12 +715,18 @@
                     } else if(val === 'M') {
                         bg = '#d2b48c';
                         text = MONTHS[month-1];
+                        html += `<div class="cell current-date-cell" style="background:${bg};border:${border}">${text}</div>`;
+                        continue;
                     } else if(val === 'D') {
                         bg = '#d2b48c';
                         text = day;
+                        html += `<div class="cell current-date-cell" style="background:${bg};border:${border}">${text}</div>`;
+                        continue;
                     } else if(val === 'W') {
                         bg = '#d2b48c';
                         text = WEEKDAYS[weekday];
+                        html += `<div class="cell current-date-cell" style="background:${bg};border:${border}">${text}</div>`;
+                        continue;
                     } else if(val >= '0' && val <= '9') {
                         const pieceNum = parseInt(val);
                         // Only show pieces up to current step
