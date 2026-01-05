@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeekDay Calendar Puzzle - Standalone</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+            padding: 10px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        .navbar-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo {
+            font-size: 2.5em;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+        }
+        
+        .navbar-center {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 2em;
+            font-weight: 900;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            letter-spacing: 1px;
+        }
+        
+        .main-content {
+            flex: 1;
+            padding: 20px;
+        }
+        
+        footer {
+            background: #2d1b47;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        
+        footer p {
+            margin: 8px 0;
+            font-size: 0.95em;
+        }
+        
+        footer .copyright {
+            font-weight: 600;
+        }
+        
+        footer .brand {
+            color: #ffd700;
+            font-weight: 700;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 { text-align: center; color: #667eea; margin-bottom: 30px; }
+        
+        .controls {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .control-group { display: flex; flex-direction: column; gap: 5px; }
+        .control-group label { font-weight: 600; font-size: 0.9em; }
+        
+        select, button {
+            padding: 10px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+        
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        button:hover { background: #5568d3; }
+        
+        .pieces-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .piece-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .piece-header { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 8px; }
+        .piece-number { font-weight: 900; font-size: 1.3em; color: #555; text-align: center; }
+        .piece-name { font-weight: 700; font-size: 1.1em; }
+        
+        .piece-visual {
+            display: inline-grid;
+            gap: 2px;
+        }
+        
+        .pc { width: 18px; height: 18px; border-radius: 3px; }
+        .pe { width: 18px; height: 18px; }
+        
+        .p0 .pc { background: #dc143c; }
+        .p1 .pc { background: #ffc0cb; }
+        .p2 .pc { background: #4b0082; }
+        .p3 .pc { background: #00ffff; }
+        .p4 .pc { background: #008080; }
+        .p5 .pc { background: #008000; }
+        .p6 .pc { background: #eee8aa; }
+        .p7 .pc { background: #ffa500; }
+        .p8 .pc { background: #808080; }
+        .p9 .pc { background: #9370db; }
+        
+        .board { 
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0px;
+            max-width: 600px;
+            margin: 0 auto;
+            background: #ddd;
+            padding: 4px;
+            border-radius: 10px;
+        }
+        
+        .year-top {
+            border-bottom: none !important;
+        }
+        
+        .year-bottom {
+            border-top: none !important;
+        }
+        
+        .cell {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.8em;
+            border-radius: 0px;
+            background: white;
+            min-height: 60px;
+            color: #222;
+        }
+        
+        #result { margin-top: 30px; text-align: center; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-left">
+            <div class="logo">
+                <img src="favicon/favicon.svg" alt="Logo" style="width: 100px; height: 100px;">
+            </div>
+        </div>
+        <div class="navbar-center">Puzzle A Day</div>
+    </nav>
+    
+    <div class="main-content">
+    <div class="container">
+        <h1>📅 WeekDay Calendar Puzzle Solver</h1>
+        
+        <div class="controls">
+            <div class="control-group">
+                <label>Month:</label>
+                <select id="month">
+                    <option value="1">Jan</option><option value="2">Feb</option>
+                    <option value="3">Mar</option><option value="4">Apr</option>
+                    <option value="5">May</option><option value="6">Jun</option>
+                    <option value="7">Jul</option><option value="8">Aug</option>
+                    <option value="9">Sep</option><option value="10">Oct</option>
+                    <option value="11">Nov</option><option value="12" selected>Dec</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label>Day:</label>
+                <select id="day"></select>
+            </div>
+            <div class="control-group">
+                <label>Weekday:</label>
+                <select id="weekday">
+                    <option value="0">Sun</option><option value="1">Mon</option>
+                    <option value="2">Tue</option><option value="3">Wed</option>
+                    <option value="4">Thu</option><option value="5">Fri</option>
+                    <option value="6" selected>Sat</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label>&nbsp;</label>
+                <button onclick="solve()" id="solve-btn">Solve Puzzle</button>
+            </div>
+            <div class="control-group">
+                <label>&nbsp;</label>
+                <button onclick="nextStep()" id="next-btn" style="display:none; background:#ff6b6b;">Next Step</button>
+            </div>
+        </div>
+        
+        <div id="current-date-info" style="text-align: center; margin-bottom: 20px; font-size: 0.9em; color: #666;">
+            <!-- Auto-filled by JavaScript -->
+        </div>
+        
+        <h3 style="margin-bottom: 15px; text-align: center;">Board Layout</h3>
+        <div class="board" id="initial-board">
+            <div class="cell" style="background:#fff8dc;border:2px solid #daa520">Jan</div>
+            <div class="cell" style="background:#fff8dc;border:2px solid #daa520">Feb</div>
+            <div class="cell" style="background:#fff8dc;border:2px solid #daa520">Mar</div>
+            <div class="cell" style="background:#fff8dc;border:2px solid #daa520">Apr</div>
+            <div class="cell" style="background:#fff8dc;border:2px solid #daa520">May</div>
+            <div class="cell" style="background:#fff8dc;border:2px solid #daa520">Jun</div>
+            <div style="background:#e8f5e9;color:#1b5e20;font-weight:900;font-size:1.8em;border:3px solid #2e7d32;border-bottom:none;border-radius:4px 4px 0 0;display:flex;align-items:center;justify-content:center;min-height:60px">20</div>
+            
+            <div class="cell" style="background:#fff8dc;border:2px solid #daa520">Jul</div>
+            <div class="cell" style="background:#fff8dc;border:2px solid #daa520">Aug</div>
+            <div class="cell" style="background:#fff8dc;border:2px solid #daa520">Sep</div>
+            <div class="cell" style="background:#fff8dc;border:2px solid #daa520">Oct</div>
+            <div class="cell" style="background:#fff8dc;border:2px solid #daa520">Nov</div>
+            <div class="cell" style="background:#fff8dc;border:2px solid #daa520">Dec</div>
+            <div style="background:#e8f5e9;color:#1b5e20;font-weight:900;font-size:1.8em;border:3px solid #2e7d32;border-top:none;border-radius:0 0 4px 4px;display:flex;align-items:center;justify-content:center;min-height:60px">25</div>
+            
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">1</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">2</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">3</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">4</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">5</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">6</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">7</div>
+            
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">8</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">9</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">10</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">11</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">12</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">13</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">14</div>
+            
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">15</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">16</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">17</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">18</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">19</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">20</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">21</div>
+            
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">22</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">23</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">24</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">25</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">26</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">27</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">28</div>
+            
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">29</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">30</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">31</div>
+            <div class="cell" style="background:#f0e68c;border:2px solid #bdb76b">Sun</div>
+            <div class="cell" style="background:#f0e68c;border:2px solid #bdb76b">Mon</div>
+            <div class="cell" style="background:#f0e68c;border:2px solid #bdb76b">Tue</div>
+            <div class="cell" style="background:#f0e68c;border:2px solid #bdb76b">Wed</div>
+            
+            <div style="grid-column: 1 / 5; background:#e3f2fd; border-radius:4px; border:3px solid #1976d2; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:8px; box-sizing:border-box; gap:2px; min-height:60px;">
+                <div style="font-weight:900; font-size:2.2em; color:#222; letter-spacing:1px; line-height:1.1;">A Puzzle A Day</div>
+                <div style="font-weight:700; font-size:1.4em; color:#555; letter-spacing:0.5px; line-height:1.1;">Woodwhiz Toys™</div>
+            </div>
+            <div class="cell" style="background:#f0e68c;border:2px solid #bdb76b">Thu</div>
+            <div class="cell" style="background:#f0e68c;border:2px solid #bdb76b">Fri</div>
+            <div class="cell" style="background:#f0e68c;border:2px solid #bdb76b">Sat</div>
+        </div>
+        
+        <h3 style="margin-top: 30px; margin-bottom: 15px;">10 Puzzle Pieces</h3>
+        <div class="pieces-grid">
+            <div class="piece-card"><div class="piece-number" style="margin-bottom: 8px;">1</div>
+                <div class="piece-visual p0" style="grid-template-columns: repeat(3,18px)">
+                    <div class="pc"></div><div class="pc"></div><div class="pe"></div>
+                    <div class="pc"></div><div class="pc"></div><div class="pc"></div>
+                </div></div>
+            
+            <div class="piece-card"><div class="piece-number" style="margin-bottom: 8px;">2</div>
+                <div class="piece-visual p1" style="grid-template-columns: repeat(2,18px)">
+                    <div class="pc"></div><div class="pe"></div>
+                    <div class="pc"></div><div class="pe"></div>
+                    <div class="pc"></div><div class="pe"></div>
+                    <div class="pc"></div><div class="pc"></div>
+                </div></div>
+            
+            <div class="piece-card"><div class="piece-number" style="margin-bottom: 8px;">3</div>
+                <div class="piece-visual p2" style="grid-template-columns: repeat(3,18px)">
+                    <div class="pc"></div><div class="pc"></div><div class="pe"></div>
+                    <div class="pe"></div><div class="pc"></div><div class="pe"></div>
+                    <div class="pe"></div><div class="pc"></div><div class="pc"></div>
+                </div></div>
+            
+            <div class="piece-card"><div class="piece-number" style="margin-bottom: 8px;">4</div>
+                <div class="piece-visual p3" style="grid-template-columns: repeat(3,18px)">
+                    <div class="pc"></div><div class="pc"></div><div class="pe"></div>
+                    <div class="pe"></div><div class="pc"></div><div class="pc"></div>
+                </div></div>
+            
+            <div class="piece-card"><div class="piece-number" style="margin-bottom: 8px;">5</div>
+                <div class="piece-visual p4" style="grid-template-columns: repeat(3,18px)">
+                    <div class="pc"></div><div class="pc"></div><div class="pc"></div>
+                    <div class="pe"></div><div class="pc"></div><div class="pe"></div>
+                    <div class="pe"></div><div class="pc"></div><div class="pe"></div>
+                </div></div>
+            
+            <div class="piece-card"><div class="piece-number" style="margin-bottom: 8px;">6</div>
+                <div class="piece-visual p5" style="grid-template-columns: repeat(3,18px)">
+                    <div class="pc"></div><div class="pe"></div><div class="pc"></div>
+                    <div class="pc"></div><div class="pc"></div><div class="pc"></div>
+                </div></div>
+            
+            <div class="piece-card"><div class="piece-number" style="margin-bottom: 8px;">7</div>
+                <div class="piece-visual p6" style="grid-template-columns: repeat(3,18px)">
+                    <div class="pc"></div><div class="pe"></div><div class="pe"></div>
+                    <div class="pc"></div><div class="pe"></div><div class="pe"></div>
+                    <div class="pc"></div><div class="pc"></div><div class="pc"></div>
+                </div></div>
+            
+            <div class="piece-card"><div class="piece-number" style="margin-bottom: 8px;">8</div>
+                <div class="piece-visual p7" style="grid-template-columns: repeat(1,18px)">
+                    <div class="pc"></div>
+                    <div class="pc"></div>
+                    <div class="pc"></div>
+                    <div class="pc"></div>
+                </div></div>
+            
+            <div class="piece-card"><div class="piece-number" style="margin-bottom: 8px;">9</div>
+                <div class="piece-visual p8" style="grid-template-columns: repeat(2,18px)">
+                    <div class="pc"></div><div class="pe"></div>
+                    <div class="pc"></div><div class="pe"></div>
+                    <div class="pc"></div><div class="pc"></div>
+                </div></div>
+            
+            <div class="piece-card"><div class="piece-number" style="margin-bottom: 8px;">10</div>
+                <div class="piece-visual p9" style="grid-template-columns: repeat(4,18px)">
+                    <div class="pc"></div><div class="pc"></div><div class="pc"></div><div class="pe"></div>
+                    <div class="pe"></div><div class="pe"></div><div class="pc"></div><div class="pc"></div>
+                </div></div>
+        </div>
+    </div>
+    </div>
+    
+    <footer>
+        <p class="copyright">© 2025 All Rights Reserved</p>
+        <p>Made By Sayeed Maskati</p>
+        <p>Property of <span class="brand">Woodwhiz Toys™</span></p>
+    </footer>
+    
+    <script type="module">
+        const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+        const WEEKDAYS = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+        const COLORS = ['#dc143c','#ffc0cb','#4b0082','#00ffff','#008080','#008000','#eee8aa','#ffa500','#808080','#9370db'];
+        
+        // Step-by-step solution state
+        let fullSolution = null;
+        let currentStep = 0;
+        let totalPieces = 10;
+        
+        // Get current date and set defaults
+        const today = new Date();
+        const currentYear = today.getFullYear();
+        const yearLastTwo = currentYear.toString().slice(-2);
+        
+        // Show current date info
+        document.getElementById('current-date-info').innerHTML = `
+            📅 Today: ${MONTHS[today.getMonth()]} ${today.getDate()}, ${currentYear} (${WEEKDAYS[today.getDay()]})
+        `;
+        
+        // Populate days
+        for(let i=1; i<=31; i++) {
+            const opt = document.createElement('option');
+            opt.value = i;
+            opt.textContent = i;
+            if(i === today.getDate()) opt.selected = true;
+            document.getElementById('day').appendChild(opt);
+        }
+        
+        // Set current month
+        document.getElementById('month').value = today.getMonth() + 1;
+        
+        // Set current weekday
+        document.getElementById('weekday').value = today.getDay();
+        
+        // Update year display on the initial board (20 and last two digits)
+        const boardCells = document.querySelectorAll('#initial-board .cell');
+        if (boardCells.length >= 7) {
+            boardCells[6].textContent = '20';  // First year cell (beside June)
+        }
+        if (boardCells.length >= 14) {
+            boardCells[13].textContent = yearLastTwo;  // Second year cell (beside Dec)
+        }
+        
+        function getBoardLabel(i, j) {
+            // Returns the original board label for position [i][j]
+            const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+            const dayNames = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+            
+            // Row 0: Jan-Jun + year
+            if(i === 0) {
+                if(j < 6) return { text: monthNames[j], bg: '#fff8dc', border: '2px solid #daa520' };
+            }
+            // Row 1: Jul-Dec + year
+            if(i === 1) {
+                if(j < 6) return { text: monthNames[j+6], bg: '#fff8dc', border: '2px solid #daa520' };
+            }
+            // Rows 2-6: Days 1-31
+            if(i >= 2 && i <= 6) {
+                const dayNum = (i-2) * 7 + j + 1;
+                if(dayNum <= 31) return { text: dayNum, bg: '#ffe4b5', border: '2px solid #cd853f' };
+            }
+            // Row 7: Days 29-31, weekdays
+            if(i === 7) {
+                if(j < 3) return { text: j + 29, bg: '#ffe4b5', border: '2px solid #cd853f' };
+                if(j >= 4) return { text: dayNames[j-4], bg: '#f0e68c', border: '2px solid #bdb76b' };
+            }
+            
+            return { text: '', bg: 'white', border: '2px solid #ddd' };
+        }
+        
+        function renderBoard(board, month, day, weekday, step) {
+            const boardTitle = document.querySelector('h3[style*="margin-top: 30px"]');
+            
+            if(step < totalPieces) {
+                boardTitle.innerHTML = `🔍 Step ${step + 1}/${totalPieces} - ${MONTHS[month-1]} ${day}, ${currentYear} (${WEEKDAYS[weekday]})`;
+            } else {
+                boardTitle.innerHTML = `🎯 Complete Solution - ${MONTHS[month-1]} ${day}, ${currentYear} (${WEEKDAYS[weekday]})`;
+            }
+            
+            let html = '';
+            
+            for(let i=0; i<8; i++) {
+                for(let j=0; j<7; j++) {
+                    const val = board[i][j];
+                    let bg = 'white';
+                    let text = '';
+                    let border = '2px solid #ddd';
+                    
+                    // Check if this is a year cell position
+                    if(i === 0 && j === 6) {
+                        bg = '#e8f5e9';
+                        text = '20';
+                        html += `<div class="cell year-top" style="background:${bg};color:#1b5e20;font-weight:900;font-size:1.8em;border-bottom:none;border-radius:4px 4px 0 0;margin-bottom:-2px;border:3px solid #2e7d32">${text}</div>`;
+                        continue;
+                    } else if(i === 1 && j === 6) {
+                        bg = '#e8f5e9';
+                        text = yearLastTwo;
+                        html += `<div class="cell year-bottom" style="background:${bg};color:#1b5e20;font-weight:900;font-size:1.8em;border-top:none;border-radius:0 0 4px 4px;margin-top:-2px;border:3px solid #2e7d32;border-top:none">${text}</div>`;
+                        continue;
+                    } else if(val === 'M') {
+                        bg = '#d2b48c';
+                        text = MONTHS[month-1];
+                    } else if(val === 'D') {
+                        bg = '#d2b48c';
+                        text = day;
+                    } else if(val === 'W') {
+                        bg = '#d2b48c';
+                        text = WEEKDAYS[weekday];
+                    } else if(val >= '0' && val <= '9') {
+                        const pieceNum = parseInt(val);
+                        // Only show pieces up to current step
+                        if(pieceNum <= step) {
+                            bg = COLORS[pieceNum];
+                            text = pieceNum + 1;
+                        } else {
+                            // Show original board label
+                            const label = getBoardLabel(i, j);
+                            bg = label.bg;
+                            text = label.text;
+                            border = label.border;
+                        }
+                    } else if(val === '#') {
+                        if(i === 7 && j >= 0 && j <= 3) {
+                            if(j === 0) {
+                                html += `<div style="grid-column: 1 / 5; background:#e3f2fd; border-radius:4px; border:3px solid #1976d2; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:8px; box-sizing:border-box; gap:2px; min-height:60px;">
+                                    <div style="font-weight:900; font-size:2.2em; color:#222; letter-spacing:1px; line-height:1.1;">A Puzzle A Day</div>
+                                    <div style="font-weight:700; font-size:1.4em; color:#555; letter-spacing:0.5px; line-height:1.1;">Woodwhiz Toys™</div>
+                                </div>`;
+                            }
+                            continue;
+                        }
+                        bg = '#f5f5f5';
+                    }
+                    
+                    html += `<div class="cell" style="background:${bg};border:${border}">${text}</div>`;
+                }
+            }
+            
+            document.getElementById('initial-board').innerHTML = html;
+        }
+        
+        function resetBoard() {
+            const boardTitle = document.querySelector('h3[style*="margin-top: 30px"]');
+            boardTitle.innerHTML = 'Board Layout';
+            
+            fullSolution = null;
+            currentStep = 0;
+            
+            // Restore original board HTML
+            document.getElementById('initial-board').innerHTML = `
+            <div class="cell" style="background:#fff8dc;border:2px solid #daa520">Jan</div>
+            <div class="cell" style="background:#fff8dc;border:2px solid #daa520">Feb</div>
+            <div class="cell" style="background:#fff8dc;border:2px solid #daa520">Mar</div>
+            <div class="cell" style="background:#fff8dc;border:2px solid #daa520">Apr</div>
+            <div class="cell" style="background:#fff8dc;border:2px solid #daa520">May</div>
+            <div class="cell" style="background:#fff8dc;border:2px solid #daa520">Jun</div>
+            <div style="background:#e8f5e9;color:#1b5e20;font-weight:900;font-size:1.8em;border:3px solid #2e7d32;border-bottom:none;border-radius:4px 4px 0 0;display:flex;align-items:center;justify-content:center;min-height:60px">20</div>
+            
+            <div class="cell" style="background:#fff8dc;border:2px solid #daa520">Jul</div>
+            <div class="cell" style="background:#fff8dc;border:2px solid #daa520">Aug</div>
+            <div class="cell" style="background:#fff8dc;border:2px solid #daa520">Sep</div>
+            <div class="cell" style="background:#fff8dc;border:2px solid #daa520">Oct</div>
+            <div class="cell" style="background:#fff8dc;border:2px solid #daa520">Nov</div>
+            <div class="cell" style="background:#fff8dc;border:2px solid #daa520">Dec</div>
+            <div style="background:#e8f5e9;color:#1b5e20;font-weight:900;font-size:1.8em;border:3px solid #2e7d32;border-top:none;border-radius:0 0 4px 4px;display:flex;align-items:center;justify-content:center;min-height:60px">${yearLastTwo}</div>
+            
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">1</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">2</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">3</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">4</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">5</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">6</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">7</div>
+            
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">8</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">9</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">10</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">11</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">12</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">13</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">14</div>
+            
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">15</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">16</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">17</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">18</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">19</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">20</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">21</div>
+            
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">22</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">23</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">24</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">25</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">26</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">27</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">28</div>
+            
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">29</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">30</div>
+            <div class="cell" style="background:#ffe4b5;border:2px solid #cd853f">31</div>
+            <div class="cell" style="background:#f0e68c;border:2px solid #bdb76b">Sun</div>
+            <div class="cell" style="background:#f0e68c;border:2px solid #bdb76b">Mon</div>
+            <div class="cell" style="background:#f0e68c;border:2px solid #bdb76b">Tue</div>
+            <div class="cell" style="background:#f0e68c;border:2px solid #bdb76b">Wed</div>
+            
+            <div style="grid-column: 1 / 5; background:#e3f2fd; border-radius:4px; border:3px solid #1976d2; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:8px; box-sizing:border-box; gap:2px; min-height:60px;">
+                <div style="font-weight:900; font-size:2.2em; color:#222; letter-spacing:1px; line-height:1.1;">A Puzzle A Day</div>
+                <div style="font-weight:700; font-size:1.4em; color:#555; letter-spacing:0.5px; line-height:1.1;">Woodwhiz Toys™</div>
+            </div>
+            <div class="cell" style="background:#f0e68c;border:2px solid #bdb76b">Thu</div>
+            <div class="cell" style="background:#f0e68c;border:2px solid #bdb76b">Fri</div>
+            <div class="cell" style="background:#f0e68c;border:2px solid #bdb76b">Sat</div>
+            `;
+            
+            document.getElementById('next-btn').style.display = 'none';
+            document.getElementById('solve-btn').textContent = 'Solve Puzzle';
+        }
+        
+        window.solve = async function() {
+            // If already solved, reset
+            if(fullSolution) {
+                resetBoard();
+                return;
+            }
+            
+            const month = parseInt(document.getElementById('month').value);
+            const day = parseInt(document.getElementById('day').value);
+            const weekday = parseInt(document.getElementById('weekday').value);
+            
+            const boardTitle = document.querySelector('h3[style*="margin-top: 30px"]');
+            boardTitle.innerHTML = 'Solving...';
+            
+            try {
+                const wasm = await import('./pkg/a_puzzle_a_day_solver.js');
+                await wasm.default();
+                
+                const solution = wasm.find_solution(month, day, weekday, 3, true);
+                
+                if(!solution) {
+                    boardTitle.innerHTML = 'Solution for ' + MONTHS[month-1] + ' ' + day + ', ' + currentYear + ' (' + WEEKDAYS[weekday] + ') - No solution found';
+                    document.getElementById('next-btn').style.display = 'none';
+                    return;
+                }
+                
+                const lines = solution.trim().split('\n');
+                fullSolution = {
+                    board: lines.map(l => l.trim().split(' ')),
+                    month: month,
+                    day: day,
+                    weekday: weekday
+                };
+                
+                // Reset to step 0 (first piece)
+                currentStep = 0;
+                renderBoard(fullSolution.board, month, day, weekday, currentStep);
+                
+                // Show next button
+                document.getElementById('next-btn').style.display = 'block';
+                document.getElementById('solve-btn').textContent = 'Reset';
+                
+            } catch(err) {
+                console.error(err);
+                const boardTitle = document.querySelector('h3[style*="margin-top: 30px"]');
+                boardTitle.innerHTML = 'Board Layout - Error loading solution';
+                alert('Error: Make sure to run from http server and build is complete');
+            }
+        }
+        
+        window.nextStep = function() {
+            if(!fullSolution) return;
+            
+            currentStep++;
+            if(currentStep >= totalPieces) {
+                currentStep = totalPieces - 1;
+                document.getElementById('next-btn').style.display = 'none';
+            }
+            
+            renderBoard(fullSolution.board, fullSolution.month, fullSolution.day, fullSolution.weekday, currentStep);
+        }
+    </script>
+</body>
+</html>

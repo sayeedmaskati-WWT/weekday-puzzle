@@ -1,0 +1,7 @@
+name = "puzzle-a-day"
+main = "worker.js"
+compatibility_date = "2025-12-13"
+
+# Serve static assets
+[site]
+bucket = "./"

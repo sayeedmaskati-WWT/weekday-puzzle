@@ -1,0 +1,11 @@
+{
+  "name": "puzzle-a-day",
+  "version": "1.0.0",
+  "description": "Calendar Puzzle Solver - WebAssembly powered puzzle solver",
+  "scripts": {
+    "deploy": "wrangler deploy"
+  },
+  "author": "Sayeed Maskati",
+  "license": "UNLICENSED",
+  "private": true
+}
