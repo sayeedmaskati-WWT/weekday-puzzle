@@ -1,0 +1,18 @@
+{
+  "name": "a-puzzle-a-day-solver",
+  "type": "module",
+  "collaborators": [
+    "Keiichi Watanabe <udon.watanabe@gmail.com>"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "a_puzzle_a_day_solver_bg.wasm",
+    "a_puzzle_a_day_solver.js",
+    "a_puzzle_a_day_solver.d.ts"
+  ],
+  "main": "a_puzzle_a_day_solver.js",
+  "types": "a_puzzle_a_day_solver.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}
