@@ -238,10 +238,17 @@
                 padding: 10px;
                 gap: 8px;
                 margin-bottom: 12px;
+                flex-wrap: wrap;
             }
             
             .control-group {
-                flex: 1 1 100%;
+                flex: 1 1 calc(33.333% - 8px);
+                min-width: 100px;
+            }
+            
+            .control-group:nth-child(4),
+            .control-group:nth-child(5) {
+                flex: 1 1 calc(50% - 8px);
             }
             
             select, button {
