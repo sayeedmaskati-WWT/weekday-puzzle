@@ -19,7 +19,7 @@
         
         .navbar {
             background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
-            padding: 10px 30px;
+            padding: 8px 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -33,7 +33,7 @@
         }
         
         .logo {
-            font-size: 2.5em;
+            font-size: 1.8em;
             filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
         }
         
@@ -42,7 +42,7 @@
             left: 50%;
             transform: translateX(-50%);
             color: white;
-            font-size: 2em;
+            font-size: 1.6em;
             font-weight: 900;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
             letter-spacing: 1px;
@@ -50,15 +50,15 @@
         
         .main-content {
             flex: 1;
-            padding: 20px;
+            padding: 12px;
         }
         
         footer {
             background: #2d1b47;
             color: white;
             text-align: center;
-            padding: 20px;
-            margin-top: 30px;
+            padding: 12px;
+            margin-top: 15px;
         }
         
         footer p {
@@ -76,22 +76,22 @@
         }
         
         .container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
             background: white;
-            border-radius: 20px;
-            padding: 30px;
+            border-radius: 15px;
+            padding: 18px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
         
-        h1 { text-align: center; color: #667eea; margin-bottom: 30px; }
+        h1 { text-align: center; color: #667eea; margin-bottom: 15px; font-size: 1.8em; }
         
         .controls {
             display: flex;
-            gap: 15px;
+            gap: 12px;
             flex-wrap: wrap;
-            margin-bottom: 30px;
-            padding: 20px;
+            margin-bottom: 15px;
+            padding: 15px;
             background: #f8f9fa;
             border-radius: 10px;
         }
@@ -119,14 +119,14 @@
         .pieces-grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            gap: 15px;
-            margin-bottom: 30px;
+            gap: 12px;
+            margin-bottom: 15px;
         }
         
         .piece-card {
             border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            padding: 15px;
+            border-radius: 8px;
+            padding: 10px;
             text-align: center;
         }
         
@@ -192,43 +192,45 @@
             body { padding: 0; }
             
             .navbar {
-                padding: 8px 15px;
+                padding: 8px 12px;
                 flex-direction: column;
-                gap: 8px;
+                gap: 6px;
             }
             
             .navbar-center {
                 position: static;
                 transform: none;
-                font-size: 1.5em;
+                font-size: 1.3em;
             }
             
             .logo img {
-                width: 60px !important;
-                height: 60px !important;
+                width: 50px !important;
+                height: 50px !important;
             }
             
             .main-content {
-                padding: 10px;
+                padding: 8px;
             }
             
             .container {
-                padding: 15px;
-                border-radius: 10px;
+                padding: 10px;
+                border-radius: 8px;
             }
             
             h1 {
-                font-size: 1.5em;
-                margin-bottom: 20px;
+                font-size: 1.2em;
+                margin-bottom: 12px;
             }
             
             h3 {
-                font-size: 1.1em;
+                font-size: 0.95em;
+                margin-bottom: 8px;
             }
             
             .controls {
-                padding: 15px;
-                gap: 10px;
+                padding: 10px;
+                gap: 8px;
+                margin-bottom: 12px;
             }
             
             .control-group {
@@ -237,66 +239,74 @@
             
             select, button {
                 width: 100%;
-                padding: 12px;
-                font-size: 1em;
+                padding: 10px;
+                font-size: 0.95em;
             }
             
             .pieces-grid {
                 grid-template-columns: repeat(2, 1fr);
-                gap: 10px;
+                gap: 8px;
+                margin-bottom: 12px;
             }
             
             .piece-card {
-                padding: 10px;
+                padding: 8px;
             }
             
             .piece-number {
-                font-size: 1em;
-            }
-            
-            .piece-name {
                 font-size: 0.9em;
             }
             
-            .pc, .pe {
-                width: 14px;
-                height: 14px;
-            }
-            
-            .board {
-                max-width: 100%;
-                padding: 3px;
-                gap: 2px;
-            }
-            
-            .cell {
-                font-size: 1em;
-                min-height: 40px;
-            }
-            
-            footer {
-                padding: 15px 10px;
+            .piece-name {
                 font-size: 0.85em;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .navbar-center {
-                font-size: 1.2em;
-            }
-            
-            h1 {
-                font-size: 1.2em;
-            }
-            
-            .cell {
-                font-size: 0.8em;
-                min-height: 35px;
             }
             
             .pc, .pe {
                 width: 12px;
                 height: 12px;
+            }
+            
+            .board {
+                max-width: 100%;
+                width: 100%;
+                padding: 2px;
+                gap: 1px;
+            }
+            
+            .cell {
+                font-size: 0.7em !important;
+                min-height: 32px !important;
+                font-weight: 800 !important;
+            }
+            
+            footer {
+                padding: 10px;
+                font-size: 0.8em;
+                margin-top: 10px;
+            }
+            
+            footer p {
+                margin: 4px 0;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .navbar-center {
+                font-size: 1.1em;
+            }
+            
+            h1 {
+                font-size: 1.1em;
+            }
+            
+            .cell {
+                font-size: 0.6em !important;
+                min-height: 28px !important;
+            }
+            
+            .pc, .pe {
+                width: 10px;
+                height: 10px;
             }
         }
     </style>
